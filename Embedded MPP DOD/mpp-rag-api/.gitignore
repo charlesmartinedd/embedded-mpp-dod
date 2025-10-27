@@ -1,0 +1,22 @@
+# Environment
+.env
+*.env
+
+# Vector Database
+chroma_db/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Logs
+*.log
+ingestion_summary.json
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini

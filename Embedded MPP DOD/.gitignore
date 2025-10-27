@@ -1,0 +1,63 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+pip-log.txt
+pip-delete-this-directory.txt
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+
+# ChromaDB
+chroma_db/
+*.db
+
+# Environment variables
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+NTUSER.DAT*
+ntuser.dat*
+nul
+
+# User directories (Windows)
+AppData/
+Desktop/
+Documents/
+Downloads/
+Music/
+Pictures/
+Videos/
+OneDrive/
+.cache/
+.config/
+.local/
+.docker/
+.flow-nexus/
+.lmstudio/
+.claude/
+.claude.json
+.claude.json.backup
+
+# Other
+"Old Files/"
+"SOP MPP Appendix I/"
+PAI/
+*.cmd
+mpp-rag-api-port8001/

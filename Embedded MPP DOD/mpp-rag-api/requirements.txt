@@ -1,0 +1,11 @@
+# RAG System Requirements
+fastapi==0.104.1
+uvicorn==0.24.0
+llama-index==0.9.14
+chromadb==0.4.18
+pymupdf==1.23.8
+python-dotenv==1.0.0
+openai==1.3.7
+pydantic==2.5.0
+sentence-transformers==2.2.2
+rank-bm25==0.2.2
