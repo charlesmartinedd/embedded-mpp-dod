@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 6 Lesson 1 - Design 3: Sidebar Slide-out</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            padding: 40px;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .module-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #1e3a5f;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .module-intro {
+            color: #555;
+            margin-bottom: 30px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .objectives-list {
+            list-style: none;
+        }
+
+        .objective-item {
+            margin-bottom: 20px;
+            border-left: 3px solid #e0e0e0;
+            padding-left: 0;
+            transition: border-color 0.3s ease;
+        }
+
+        .objective-item:hover {
+            border-left-color: #0066cc;
+        }
+
+        .objective-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 15px 20px;
+            background: #fafafa;
+            border-radius: 8px;
+        }
+
+        .objective-text {
+            flex: 1;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .ref-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #1e3a5f 0%, #2a5082 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(30, 58, 95, 0.25);
+            transition: all 0.3s ease;
+        }
+
+        .ref-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(30, 58, 95, 0.35);
+            background: linear-gradient(135deg, #2a5082 0%, #1e3a5f 100%);
+        }
+
+        .ref-button:active {
+            transform: translateY(0);
+        }
+
+        /* Sidebar Styles */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .sidebar-overlay.show {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .sidebar-container {
+            position: fixed;
+            top: 0;
+            right: -500px;
+            width: 500px;
+            height: 100%;
+            background: white;
+            box-shadow: -4px 0 20px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            transition: right 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-container.show {
+            right: 0;
+        }
+
+        .sidebar-header {
+            background: linear-gradient(135deg, #1e3a5f 0%, #2a5082 100%);
+            color: white;
+            padding: 25px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .sidebar-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .sidebar-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
+            line-height: 1;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .sidebar-objective {
+            padding: 20px 30px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e0e0e0;
+            flex-shrink: 0;
+        }
+
+        .sidebar-objective-text {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .sidebar-body {
+            padding: 25px 30px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .reference-card {
+            background: white;
+            border: 2px solid #1e3a5f;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .reference-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .ref-header {
+            margin-bottom: 12px;
+        }
+
+        .ref-source {
+            color: #0066cc;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .ref-location {
+            color: #1e3a5f;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .ref-excerpt {
+            color: #555;
+            font-size: 14px;
+            line-height: 1.6;
+            padding: 12px;
+            background: #f8f9fa;
+            border-left: 4px solid #0066cc;
+            border-radius: 4px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 20px;
+            }
+
+            .module-container {
+                padding: 25px;
+            }
+
+            .objective-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .ref-button {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .sidebar-container {
+                width: 100%;
+                right: -100%;
+            }
+
+            .sidebar-header, .sidebar-objective, .sidebar-body {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="module-container">
+        <h1>Learning Objectives</h1>
+        <p class="module-intro">By the end of this lesson, you will be able to:</p>
+
+        <ul class="objectives-list">
+            <li class="objective-item">
+                <div class="objective-header">
+                    <span class="objective-text">Execute effective kickoff meetings within the required 30-day window</span>
+                    <button class="ref-button" onclick="openSidebar(this, 0)">
+                        📚 Find in SOP/Appendix I
+                    </button>
+                </div>
+            </li>
+
+            <li class="objective-item">
+                <div class="objective-header">
+                    <span class="objective-text">Conduct Quarterly Agreement Reviews (QARs) that drive progress</span>
+                    <button class="ref-button" onclick="openSidebar(this, 1)">
+                        📚 Find in SOP/Appendix I
+                    </button>
+                </div>
+            </li>
+
+            <li class="objective-item">
+                <div class="objective-header">
+                    <span class="objective-text">Prepare and deliver Quarterly Program Management Reviews (PMRs) to DoD leadership</span>
+                    <button class="ref-button" onclick="openSidebar(this, 2)">
+                        📚 Find in SOP/Appendix I
+                    </button>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+    <div class="sidebar-container" id="sidebarContainer">
+        <div class="sidebar-header">
+            <h2 class="sidebar-title">Reference</h2>
+            <button class="sidebar-close" onclick="closeSidebar()">&times;</button>
+        </div>
+        <div class="sidebar-objective">
+            <p class="sidebar-objective-text" id="sidebarObjectiveText"></p>
+        </div>
+        <div class="sidebar-body" id="sidebarBody">
+            <!-- References will be inserted here -->
+        </div>
+    </div>
+
+    <script>
+        const referencesData = [
+            // Objective 0: Kickoff meetings
+            [
+                {
+                    source: "MPP SOP",
+                    confidence: "45%",
+                    location: "Page 30",
+                    excerpt: "The Services/ Defense Agencies' PM shall hold an initial kickoff meeting within the first 30 days of the agreement award (Appendix L and Appendix M)."
+                }
+            ],
+            // Objective 1: QARs
+            [
+                {
+                    source: "MPP SOP",
+                    confidence: "45%",
+                    location: "Page 30",
+                    excerpt: "Services/ Defense Agencies' PMs shall conduct quarterly assessments to determine program status and address any issues, questions, or concerns."
+                },
+                {
+                    source: "MPP SOP",
+                    confidence: "38%",
+                    location: "Pages 22, 31-32",
+                    excerpt: "For reimbursable agreements: \"Agency PMs will ensure DCMA and other stakeholders are present during the agency's QARs.\" QARs cover scheduling, expenditures, certification status, training courses, and other items pertinent to performance."
+                }
+            ],
+            // Objective 2: PMRs
+            [
+                {
+                    source: "MPP SOP",
+                    confidence: "64%",
+                    location: "Page 31",
+                    excerpt: "Quarterly Program Management Reviews (PMRs) are required to be briefed to the DoD OSBP MPP Director. Each Service/Defense Agency MPP PM shall complete a quarterly PMR slide deck and submit the slide deck to the DoD OSBP 48 hours prior to the scheduled quarterly PMR meeting."
+                },
+                {
+                    source: "MPP SOP",
+                    confidence: "53%",
+                    location: "Page 31",
+                    excerpt: "See Quarterly PMR Review Slides Template for the quarterly PMR Review Slides. Please DO NOT alter the template format. On average, a minimum of 25% of the MPAs managed by the Service/Defense Agency MPP PM will be briefed."
+                }
+            ]
+        ];
+
+        function openSidebar(button, objectiveIndex) {
+            const objectiveText = button.closest('.objective-item').querySelector('.objective-text').textContent;
+            const references = referencesData[objectiveIndex];
+
+            document.getElementById('sidebarObjectiveText').textContent = objectiveText;
+
+            const sidebarBody = document.getElementById('sidebarBody');
+            sidebarBody.innerHTML = references.map(ref => `
+                <div class="reference-card">
+                    <div class="ref-header">
+                        <span class="ref-source">${ref.source}</span>
+                    </div>
+                    <div class="ref-location">${ref.location}</div>
+                    <div class="ref-excerpt">${ref.excerpt}</div>
+                </div>
+            `).join('');
+
+            document.getElementById('sidebarOverlay').classList.add('show');
+            document.getElementById('sidebarContainer').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSidebar() {
+            document.getElementById('sidebarOverlay').classList.remove('show');
+            document.getElementById('sidebarContainer').classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeSidebar();
+            }
+        });
+    </script>
+</body>
+</html>
